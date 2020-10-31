@@ -29,6 +29,10 @@ public class LogAggregator {
         return logFileHolders;
     }
 
+    public void aggregate(File[] files) {
+        aggregate(files, System.out);
+    }
+
     void aggregate(File[] files, PrintStream output) {
         TreeSet<LogFileHolder> logFileHolders = buildLogFileHolders(files);
 
@@ -41,10 +45,8 @@ public class LogAggregator {
 
             if (!Objects.isNull(nextLog))
                 logFileHolders.add(logFileHolder);
+            else
+                logFileHolder.closeFile();
         }
-    }
-
-    public void aggregate(File[] files) {
-        aggregate(files, System.out);
     }
 }

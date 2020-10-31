@@ -63,7 +63,29 @@ Where `<log-files-dir>` is the directory containing the huge log files.
 Example:
 
 ```shell
-$ java -jar build/libs/log-aggregator.jar /temp/logs
+$ java -jar build/libs/log-aggregator.jar src/test/resources/fixtures
+
+______                        _______                                                  _____
+___  / ______ _______ _       ___    |_______ ________ ______________ _______ _______ ___  /_______ ________
+__  /  _  __ \__  __ `/       __  /| |__  __ `/__  __ `/__  ___/_  _ \__  __ `/_  __ `/_  __/_  __ \__  ___/
+_  /___/ /_/ /_  /_/ /        _  ___ |_  /_/ / _  /_/ / _  /    /  __/_  /_/ / / /_/ / / /_  / /_/ /_  /
+/_____/\____/ _\__, /         /_/  |_|_\__, /  _\__, /  /_/     \___/ _\__, /  \__,_/  \__/  \____/ /_/
+              /____/                  /____/   /____/                 /____/
+2016-12-20T18:51:16Z, Server C started.
+2016-12-20T19:00:45Z, Server A started.
+2016-12-20T19:01:16Z, Server B started.
+2016-12-20T19:01:25Z, Server A completed job.
+2016-12-20T19:02:02Z, Server C completed job.
+2016-12-20T19:02:48Z, Server A terminated.
+2016-12-20T19:03:25Z, Server B completed job.
+2016-12-20T19:04:50Z, Server B terminated.
+2016-12-20T19:05:00Z, Server C terminated.
+2016-12-20T19:59:15Z, Server D started.
+2016-12-20T20:22:40Z, Server E started.
+2016-12-20T20:25:11Z, Server D completed job.
+2016-12-20T20:25:11Z, Server D terminated.
+2016-12-20T20:26:02Z, Server E completed job.
+2016-12-20T20:26:03Z, Server E terminated.
 ```
 
 ## Testing

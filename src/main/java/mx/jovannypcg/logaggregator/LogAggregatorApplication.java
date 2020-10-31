@@ -6,11 +6,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.File;
-import java.util.Objects;
 
 @SpringBootApplication
 public class LogAggregatorApplication implements CommandLineRunner {
-    private LogAggregator logAggregator;
+    private final LogAggregator logAggregator;
 
     public LogAggregatorApplication(LogAggregator logAggregator) {
         this.logAggregator = logAggregator;
@@ -21,12 +20,11 @@ public class LogAggregatorApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         if (args.length == 0)
             throw new IllegalArgumentException("Usage: java -jar log-aggregator.jar <log-dir>");
 
         var logDirectory = new File(args[0]);
-        var standardOutput = System.out;
 
         if (!logDirectory.exists() || !logDirectory.isDirectory())
             throw new IllegalArgumentException("<log-dir> must be a directory containing log files");

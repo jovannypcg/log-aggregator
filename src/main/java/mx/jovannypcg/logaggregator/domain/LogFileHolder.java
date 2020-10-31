@@ -41,4 +41,9 @@ public class LogFileHolder {
         var randomAccessFile = new RandomAccessFile(file, "r");
         return new LogFileHolder(randomAccessFile);
     }
+
+    @SneakyThrows
+    public void closeFile() {
+        randomAccessFile.close();
+    }
 }

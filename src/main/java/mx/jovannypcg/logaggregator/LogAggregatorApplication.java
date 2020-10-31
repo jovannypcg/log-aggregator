@@ -26,6 +26,7 @@ public class LogAggregatorApplication implements CommandLineRunner {
             throw new IllegalArgumentException("Usage: java -jar log-aggregator.jar <log-dir>");
 
         var logDirectory = new File(args[0]);
+        var standardOutput = System.out;
 
         if (!logDirectory.exists() || !logDirectory.isDirectory())
             throw new IllegalArgumentException("<log-dir> must be a directory containing log files");

@@ -10,10 +10,6 @@ entries from the different files sorted by timestamp.
 * [Building](#building)
 * [Usage](#usage)
 * [Testing](#testing)
-* [Docker Integration](#docker-integration)
-  * [Building](#build-with-docker)
-  * [Usage](#usage-with-docker)
-  * [Testing](#testing-with-docker)
 
 ## Prerequisites
 
@@ -74,31 +70,4 @@ $ java -jar build/libs/log-aggregator.jar /temp/logs
 
 ```shell
 $ ./gradlew clean test
-```
-
-## Docker Integration
-
-`log-aggregator` has Docker integration, which means that it can be also built and executed within a Docker container.
-
-### Build With Docker
-
-```shell
-$ docker build -t log-aggregator -f src/main/docker/Dockerfile .
-```
-
-Where:
-
-* `log-aggregator` is describing a tag for the Docker image
-* `src/main/docker/Dockerfile` is the path where the `Dockerfile` is located, in order to build the image
-
-### Usage With Docker
-
-```shell
-$ docker run --rm log-aggregator
-```
-
-### Testing With Docker
-
-```shell
-$ docker run --rm log-aggregator gradle -p /app/ clean test
 ```

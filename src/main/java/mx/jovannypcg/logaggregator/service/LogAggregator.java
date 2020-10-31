@@ -1,62 +1,50 @@
 package mx.jovannypcg.logaggregator.service;
 
-import lombok.SneakyThrows;
 import mx.jovannypcg.logaggregator.domain.LogFileHolder;
 import mx.jovannypcg.logaggregator.domain.comparator.LogFileHolderComparator;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.TreeSet;
 
 @Service
 public class LogAggregator {
-    @SneakyThrows
-    private RandomAccessFile toRandomAccessFile(File file) {
-        return new RandomAccessFile(file, "r");
+    private boolean fileExists(File file) {
+        return file.isFile() && file.exists();
     }
 
-    @SneakyThrows
-    private LogFileHolder toLogFileHolder(RandomAccessFile randomAccessFile) {
-        var log = randomAccessFile.readLine();
-        var position = randomAccessFile.getFilePointer();
-
-        return Objects.isNull(log) ? null : new LogFileHolder(randomAccessFile, log, position);
-    }
-
-    TreeSet<LogFileHolder> buildLogFileHoldersSet(File[] files) {
+    TreeSet<LogFileHolder> buildLogFileHolders(File[] files) {
         TreeSet<LogFileHolder> logFileHolders = new TreeSet<>(new LogFileHolderComparator());
 
         Arrays.stream(files)
-                .map(this::toRandomAccessFile)
-                .map(this::toLogFileHolder)
-                .filter(logFileHolder -> !Objects.isNull(logFileHolder))
+                .filter(this::fileExists)
+                .map(LogFileHolder::with)
+                .peek(LogFileHolder::readLog)
+                .filter(LogFileHolder::isLogAvailable)
                 .forEach(logFileHolders::add);
 
         return logFileHolders;
     }
 
-    public void aggregate(File[] files) throws IOException {
-        TreeSet<LogFileHolder> logFileHolders = buildLogFileHoldersSet(files);
+    void aggregate(File[] files, PrintStream output) {
+        TreeSet<LogFileHolder> logFileHolders = buildLogFileHolders(files);
 
         while (!logFileHolders.isEmpty()) {
             var logFileHolder = logFileHolders.pollFirst();
             var currentLog = logFileHolder.getLog();
-            var currentRandomAccessFile = logFileHolder.getRandomAccessFile();
 
-            System.out.println(currentLog);
+            output.println(currentLog);
+            var nextLog = logFileHolder.readLog();
 
-            var nextLog = currentRandomAccessFile.readLine();
-
-            if (!Objects.isNull(nextLog)) {
-                logFileHolder.setLog(nextLog);
-                logFileHolder.setPosition(currentRandomAccessFile.getFilePointer());
-
+            if (!Objects.isNull(nextLog))
                 logFileHolders.add(logFileHolder);
-            }
         }
+    }
+
+    public void aggregate(File[] files) {
+        aggregate(files, System.out);
     }
 }

@@ -12,8 +12,8 @@ import java.util.TreeSet;
 
 /**
  * Aggregates a bunch of log files; contains the necessary domain logic
- * to sort the logs by timestamp and provides a single output from all the concerned
- * log files.
+ * to sort the logs by timestamp and provides a single output for all the
+ * concerned log files.
  */
 @Service
 public class LogAggregator {
@@ -23,7 +23,7 @@ public class LogAggregator {
 
     /**
      * Returns an instance of {@link TreeSet}, a data structure able to sort its elements given a comparator.
-     * The set holds {@link LogFileHolder} instances whose sort method is by the timestamp provided by the
+     * The set holds {@link LogFileHolder} instances whose sort method is the timestamp provided by the
      * {@link LogFileHolder#log} attribute.
      *
      * First off, every file passed in as argument is converted into an instance of {@link LogFileHolder}, which
@@ -34,7 +34,9 @@ public class LogAggregator {
      * their respective file, so that the {@link TreeSet} knows how to sort its items.
      *
      * @param files
-     * @return
+     * @return TreeSet instance whose items are {@link LogFileHolder} with a {@link RandomAccessFile} and a
+     *         String, representing the first log of the file. The TreeSet instance ensures log(n) time
+     *         cost for operations like adding and removing, as its items are sorted.
      */
     TreeSet<LogFileHolder> buildLogFileHolders(File[] files) {
         TreeSet<LogFileHolder> logFileHolders = new TreeSet<>(new LogFileHolderComparator());
@@ -50,8 +52,8 @@ public class LogAggregator {
     }
 
     /**
-     * @see #aggregate(File[], PrintStream) 
-     * @param files Files containing log to be aggregated.
+     * @see #aggregate(File[], PrintStream)
+     * @param files Files containing logs to be aggregated.
      */
     public void aggregate(File[] files) {
         aggregate(files, System.out);
@@ -64,7 +66,7 @@ public class LogAggregator {
      * current logs of each file are sorted based on their timestamp.
      *
      * The first item of the {@link TreeSet} set is grabbed and its log is printed out. Then the next log
-     * of the {@link java.io.RandomAccessFile} instance is read and put to the {@code TreeSet} in order to
+     * of the {@link java.io.RandomAccessFile} instance is read and put into the {@code TreeSet} in order to
      * keep the correct order.
      *
      * @param files Files containing logs to be aggregated.
